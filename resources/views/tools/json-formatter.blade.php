@@ -317,7 +317,7 @@ URL.revokeObjectURL(url);
 
 
 </script>
-
+@verbatim
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -342,4 +342,5 @@ URL.revokeObjectURL(url);
  ]
 }
 </script>
+@endverbatim
 @endsection
