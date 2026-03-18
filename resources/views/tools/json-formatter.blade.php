@@ -1,324 +1,309 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="mb-6">
 
-<div class="mb-6">
+        <h1 class="text-3xl font-bold">
+            JSON Formatter & Validator
+        </h1>
 
-<h1 class="text-3xl font-bold">
-JSON Formatter & Validator
-</h1>
+        <p class="text-gray-600 mt-2">
+            Format, validate, and view JSON in a readable structure instantly.
+        </p>
 
-<p class="text-gray-600 mt-2">
-Format, validate, and view JSON in a readable structure instantly.
-</p>
+    </div>
 
-</div>
+    <div class="bg-white border rounded-lg p-6 shadow-sm">
 
-<div class="bg-white border rounded-lg p-6 shadow-sm">
+        <div class="grid md:grid-cols-2 gap-6">
 
-<div class="grid md:grid-cols-2 gap-6">
+            <textarea id="jsonInput" class="w-full h-96 border rounded p-3" placeholder="Paste JSON here"></textarea>
 
-<textarea id="jsonInput"
-class="w-full h-96 border rounded p-3"
-placeholder="Paste JSON here"></textarea>
+            <div>
 
-<div>
+                <div class="flex gap-2 mb-2">
 
-<div class="flex gap-2 mb-2">
+                    <button onclick="showFormatted()" class="bg-blue-600 text-white px-3 py-1 rounded">
+                        Formatted
+                    </button>
 
-<button onclick="showFormatted()"
-class="bg-blue-600 text-white px-3 py-1 rounded">
-Formatted
-</button>
+                    <button onclick="showTree()" class="bg-gray-700 text-white px-3 py-1 rounded">
+                        Tree
+                    </button>
 
-<button onclick="showTree()"
-class="bg-gray-700 text-white px-3 py-1 rounded">
-Tree
-</button>
+                </div>
 
-</div>
 
+                <textarea id="jsonOutput" class="w-full h-96 border rounded p-3" placeholder="Formatted JSON will appear here..."
+                    readonly></textarea>
 
-<textarea id="jsonOutput"
-class="w-full h-96 border rounded p-3"
-placeholder="Formatted JSON will appear here..."
-readonly></textarea>
+                <div id="jsonTree" class="h-96 border rounded hidden"></div>
 
-<div id="jsonTree"
-class="h-96 border rounded hidden"></div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+        <div class="flex flex-wrap gap-3 mt-4">
 
-<div class="flex flex-wrap gap-3 mt-4">
+            <button onclick="formatJSON()" class="bg-blue-600 text-white px-4 py-2 rounded">
+                Format
+            </button>
 
-<button onclick="formatJSON()"
-class="bg-blue-600 text-white px-4 py-2 rounded">
-Format
-</button>
+            <button onclick="minifyJSON()" class="bg-gray-700 text-white px-4 py-2 rounded">
+                Minify
+            </button>
 
-<button onclick="minifyJSON()"
-class="bg-gray-700 text-white px-4 py-2 rounded">
-Minify
-</button>
+            <button onclick="validateJSON()" class="bg-green-600 text-white px-4 py-2 rounded">
+                Validate
+            </button>
 
-<button onclick="validateJSON()"
-class="bg-green-600 text-white px-4 py-2 rounded">
-Validate
-</button>
+            <button onclick="clearJSON()" class="bg-red-500 text-white px-4 py-2 rounded">
+                Clear
+            </button>
 
-<button onclick="clearJSON()"
-class="bg-red-500 text-white px-4 py-2 rounded">
-Clear
-</button>
+            <button onclick="copyJSON()" class="bg-indigo-600 text-white px-4 py-2 rounded">
+                Copy
+            </button>
 
-<button onclick="copyJSON()"
-class="bg-indigo-600 text-white px-4 py-2 rounded">
-Copy
-</button>
+            <button onclick="downloadJSON()" class="bg-purple-600 text-white px-4 py-2 rounded">
+                Download
+            </button>
 
-<button onclick="downloadJSON()"
-class="bg-purple-600 text-white px-4 py-2 rounded">
-Download
-</button>
+            <label class="bg-gray-800 text-white px-4 py-2 rounded cursor-pointer">
+                Upload
+                <input type="file" id="jsonFile" class="hidden" onchange="uploadJSON(event)">
+            </label>
 
-<label class="bg-gray-800 text-white px-4 py-2 rounded cursor-pointer">
-Upload
-<input type="file" id="jsonFile" class="hidden" onchange="uploadJSON(event)">
-</label>
+        </div>
 
-</div>
+    </div>
 
-</div>
 
+    <div class="mt-12">
 
-<div class="mt-12">
+        <h2 class="text-2xl font-semibold mb-6">
+            Frequently Asked Questions
+        </h2>
 
-<h2 class="text-2xl font-semibold mb-6">
-Frequently Asked Questions
-</h2>
+        <div class="space-y-6">
 
-<div class="space-y-6">
+            <div>
 
-<div>
+                <h3 class="font-semibold text-lg">
+                    What is a JSON formatter?
+                </h3>
 
-<h3 class="font-semibold text-lg">
-What is a JSON formatter?
-</h3>
+                <p class="text-gray-600 mt-1">
+                    A JSON formatter converts raw JSON into a readable structure with proper indentation.
+                </p>
 
-<p class="text-gray-600 mt-1">
-A JSON formatter converts raw JSON into a readable structure with proper indentation.
-</p>
+            </div>
 
-</div>
+            <div>
 
-<div>
+                <h3 class="font-semibold text-lg">
+                    How do I validate JSON?
+                </h3>
 
-<h3 class="font-semibold text-lg">
-How do I validate JSON?
-</h3>
+                <p class="text-gray-600 mt-1">
+                    Paste JSON into the input box and click validate. The tool will show whether the JSON is valid or
+                    contains errors.
+                </p>
 
-<p class="text-gray-600 mt-1">
-Paste JSON into the input box and click validate. The tool will show whether the JSON is valid or contains errors.
-</p>
+            </div>
 
-</div>
+            <div>
 
-<div>
+                <h3 class="font-semibold text-lg">
+                    What does JSON minify mean?
+                </h3>
 
-<h3 class="font-semibold text-lg">
-What does JSON minify mean?
-</h3>
+                <p class="text-gray-600 mt-1">
+                    Minifying JSON removes spaces and line breaks, making the data smaller and faster to transmit.
+                </p>
 
-<p class="text-gray-600 mt-1">
-Minifying JSON removes spaces and line breaks, making the data smaller and faster to transmit.
-</p>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-</div>
 
+    <link href="https://cdn.jsdelivr.net/npm/jsoneditor@9/dist/jsoneditor.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jsoneditor@9/dist/jsoneditor.min.js"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/jsoneditor@9/dist/jsoneditor.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/jsoneditor@9/dist/jsoneditor.min.js"></script>
 
+    <script>
+        let editor;
 
-<script>
+        function formatJSON() {
 
-let editor;
+            const input = document.getElementById("jsonInput").value;
 
-function formatJSON() {
+            try {
 
-const input = document.getElementById("jsonInput").value;
+                const parsed = JSON.parse(input);
 
-try {
+                const formatted = JSON.stringify(parsed, null, 2);
 
-const parsed = JSON.parse(input);
+                document.getElementById("jsonOutput").value = formatted;
 
-const formatted = JSON.stringify(parsed, null, 2);
+            } catch (e) {
 
-document.getElementById("jsonOutput").value = formatted;
+                alert("Invalid JSON: " + e.message);
 
-} catch(e) {
+            }
 
-alert("Invalid JSON: " + e.message);
+        }
 
-}
 
-}
+        function minifyJSON() {
 
+            const input = document.getElementById("jsonInput").value;
 
-function minifyJSON() {
+            try {
 
-const input = document.getElementById("jsonInput").value;
+                const parsed = JSON.parse(input);
 
-try {
+                const minified = JSON.stringify(parsed);
 
-const parsed = JSON.parse(input);
+                document.getElementById("jsonOutput").value = minified;
 
-const minified = JSON.stringify(parsed);
+            } catch (e) {
 
-document.getElementById("jsonOutput").value = minified;
+                alert("Invalid JSON");
 
-} catch(e) {
+            }
 
-alert("Invalid JSON");
+        }
 
-}
 
-}
+        function validateJSON() {
 
+            const input = document.getElementById("jsonInput").value;
 
-function validateJSON() {
+            try {
 
-const input = document.getElementById("jsonInput").value;
+                JSON.parse(input);
 
-try {
+                alert("Valid JSON");
 
-JSON.parse(input);
+            } catch (e) {
 
-alert("Valid JSON");
+                alert("Invalid JSON: " + e.message);
 
-} catch(e) {
+            }
 
-alert("Invalid JSON: " + e.message);
+        }
 
-}
 
-}
+        function clearJSON() {
 
+            document.getElementById("jsonInput").value = "";
+            document.getElementById("jsonOutput").value = "";
 
-function clearJSON(){
+        }
 
-document.getElementById("jsonInput").value = "";
-document.getElementById("jsonOutput").value = "";
 
-}
+        function showFormatted() {
 
+            document.getElementById("jsonOutput").classList.remove("hidden");
+            document.getElementById("jsonTree").classList.add("hidden");
 
-function showFormatted(){
+        }
 
-document.getElementById("jsonOutput").classList.remove("hidden");
-document.getElementById("jsonTree").classList.add("hidden");
 
-}
+        function showTree() {
 
+            const input = document.getElementById("jsonInput").value;
 
-function showTree(){
+            try {
 
-const input = document.getElementById("jsonInput").value;
+                const parsed = JSON.parse(input);
 
-try {
+                document.getElementById("jsonOutput").classList.add("hidden");
+                document.getElementById("jsonTree").classList.remove("hidden");
 
-const parsed = JSON.parse(input);
+                if (!editor) {
 
-document.getElementById("jsonOutput").classList.add("hidden");
-document.getElementById("jsonTree").classList.remove("hidden");
+                    const container = document.getElementById("jsonTree");
 
-if(!editor){
+                    editor = new JSONEditor(container, {
+                        mode: "view"
+                    });
 
-const container = document.getElementById("jsonTree");
+                }
 
-editor = new JSONEditor(container,{
-mode:"view"
-});
+                editor.set(parsed);
 
-}
+            } catch (e) {
 
-editor.set(parsed);
+                alert("Invalid JSON");
 
-}catch(e){
+            }
 
-alert("Invalid JSON");
+        }
 
-}
+        function copyJSON() {
 
-}
+            const output = document.getElementById("jsonOutput").value;
 
-function copyJSON(){
+            navigator.clipboard.writeText(output);
 
-const output = document.getElementById("jsonOutput").value;
+            alert("Copied to clipboard");
 
-navigator.clipboard.writeText(output);
+        }
 
-alert("Copied to clipboard");
+        function uploadJSON(event) {
 
-}
+            const file = event.target.files[0];
 
-function uploadJSON(event){
+            if (!file) return;
 
-const file = event.target.files[0];
+            const reader = new FileReader();
 
-if(!file) return;
+            reader.onload = function(e) {
 
-const reader = new FileReader();
+                document.getElementById("jsonInput").value = e.target.result;
 
-reader.onload = function(e){
+            };
 
-document.getElementById("jsonInput").value = e.target.result;
+            reader.readAsText(file);
 
-};
+        }
 
-reader.readAsText(file);
+        function downloadJSON() {
 
-}
+            const data = document.getElementById("jsonOutput").value;
 
-function downloadJSON(){
+            if (!data) {
 
-const data = document.getElementById("jsonOutput").value;
+                alert("Nothing to download");
 
-if(!data){
+                return;
 
-alert("Nothing to download");
+            }
 
-return;
+            const blob = new Blob([data], {
+                type: "application/json"
+            });
 
-}
+            const url = URL.createObjectURL(blob);
 
-const blob = new Blob([data], { type: "application/json" });
+            const a = document.createElement("a");
 
-const url = URL.createObjectURL(blob);
+            a.href = url;
 
-const a = document.createElement("a");
+            a.download = "formatted.json";
 
-a.href = url;
+            a.click();
 
-a.download = "formatted.json";
+            URL.revokeObjectURL(url);
 
-a.click();
-
-URL.revokeObjectURL(url);
-
-}
-
-
-
-</script>
-@verbatim
-<script type="application/ld+json">
+        }
+    </script>
+    @verbatim
+        <script type="application/ld+json">
 {
  "@context": "https://schema.org",
  "@type": "FAQPage",
@@ -342,5 +327,5 @@ URL.revokeObjectURL(url);
  ]
 }
 </script>
-@endverbatim
+    @endverbatim
 @endsection
